@@ -5,11 +5,13 @@ rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/in
 rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/_ti_config.h
 rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/linkage.h
 rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/cdefs.h
+rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdio.h
+rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdarg.h
+rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/_types.h
+rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/machine/_types.h
 rfEasyLinkTx.obj: /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/source/ti/drivers/timer/GPTimerCC26XX.h
 rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdint.h
 rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/stdint.h
-rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/_types.h
-rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/machine/_types.h
 rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/machine/_stdint.h
 rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/_stdint.h
 rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdbool.h
@@ -36,7 +38,6 @@ rfEasyLinkTx.obj: /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_
 rfEasyLinkTx.obj: /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/source/ti/devices/cc13x0/driverlib/timer.h
 rfEasyLinkTx.obj: /home/luciana/ti/xdctools_3_50_08_24_core/packages/xdc/runtime/Types.h
 rfEasyLinkTx.obj: /home/luciana/ti/xdctools_3_50_08_24_core/packages/xdc/std.h
-rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdarg.h
 rfEasyLinkTx.obj: /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/kernel/tirtos/packages/ti/targets/arm/elf/std.h
 rfEasyLinkTx.obj: /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/kernel/tirtos/packages/ti/targets/arm/elf/M3.h
 rfEasyLinkTx.obj: /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/kernel/tirtos/packages/ti/targets/std.h
@@ -234,11 +235,13 @@ rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/in
 /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/_ti_config.h: 
 /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/linkage.h: 
 /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/cdefs.h: 
+/home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdio.h: 
+/home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdarg.h: 
+/home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/_types.h: 
+/home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/machine/_types.h: 
 /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/source/ti/drivers/timer/GPTimerCC26XX.h: 
 /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdint.h: 
 /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/stdint.h: 
-/home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/_types.h: 
-/home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/machine/_types.h: 
 /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/machine/_stdint.h: 
 /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/sys/_stdint.h: 
 /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdbool.h: 
@@ -265,7 +268,6 @@ rfEasyLinkTx.obj: /home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/in
 /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/source/ti/devices/cc13x0/driverlib/timer.h: 
 /home/luciana/ti/xdctools_3_50_08_24_core/packages/xdc/runtime/Types.h: 
 /home/luciana/ti/xdctools_3_50_08_24_core/packages/xdc/std.h: 
-/home/luciana/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include/stdarg.h: 
 /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/kernel/tirtos/packages/ti/targets/arm/elf/std.h: 
 /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/kernel/tirtos/packages/ti/targets/arm/elf/M3.h: 
 /home/luciana/ti/workspaces/ProjectZero/simplelink_cc13x0_sdk_2_20_00_38/kernel/tirtos/packages/ti/targets/std.h: 

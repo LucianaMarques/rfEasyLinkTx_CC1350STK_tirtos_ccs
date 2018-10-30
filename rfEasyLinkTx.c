@@ -35,6 +35,7 @@
  */
  /* Standard C Libraries */
 #include <stdlib.h>
+#include <stdio.h>
 
 /* timer library */
 #include <ti/drivers/timer/GPTimerCC26XX.h>
@@ -82,6 +83,11 @@
 Task_Struct txTask;    /* not static so you can see in ROV */
 static Task_Params txTaskParams;
 static uint8_t txTaskStack[RFEASYLINKTX_TASK_STACK_SIZE];
+
+/*Timer driver handle */
+static GPTimerCC26XX_Handle hTimer;
+Task_Struct timerTask;
+static Task_Params timerTaskParams;
 
 /* Pin driver handle */
 static PIN_Handle pinHandle;
@@ -244,6 +250,8 @@ static void rfEasyLinkTxFnx(UArg arg0, UArg arg1)
         }
 #endif //RFEASYLINKTX_ASYNC
     }
+
+
 }
 
 void txTask_init(PIN_Handle inPinHandle) {
@@ -262,24 +270,21 @@ void txTask_init(PIN_Handle inPinHandle) {
  *  Timer
  */
 
-GPTimerCC26XX_Handle hTimer;
-
 void timerCallback(GPTimerCC26XX_Handle handle, GPTimerCC26XX_IntMask interruptMask) {
     // interrupt callback code goes here. Minimize processing in interrupt.
     printf("Callback\n");
 }
 
 void taskFxn(UArg a0, UArg a1) {
-  GPTimerCC26XX_Part CC1350_GPTIMER0A;
   GPTimerCC26XX_Params params;
   GPTimerCC26XX_Params_init(&params);
   params.width          = GPT_CONFIG_16BIT;
   params.mode           = GPT_MODE_PERIODIC_UP;
   params.debugStallMode = GPTimerCC26XX_DEBUG_STALL_OFF;
-  hTimer = GPTimerCC26XX_open(CC1350_GPTIMER0A, &params);
+  hTimer = GPTimerCC26XX_open(CC1350STK_GPTIMER0A, &params);
 
   if(hTimer == NULL) {
-    Log_error0("Failed to open GPTimer");
+    //Log_error0("Failed to open GPTimer");
     Task_exit();
   }
 
@@ -290,11 +295,22 @@ void taskFxn(UArg a0, UArg a1) {
   GPTimerCC26XX_registerInterrupt(hTimer, timerCallback, GPT_INT_TIMEOUT);
   GPTimerCC26XX_start(hTimer);
 
-  while(1) {
-    Task_sleep(BIOS_WAIT_FOREVER);
-  }
+  printf("oi pedro\n");
 
 }
+
+
+void Timer_init(void) {
+
+    Task_Params_init(&timerTaskParams);
+    timerTaskParams.stackSize = RFEASYLINKTX_TASK_STACK_SIZE;
+    timerTaskParams.priority = RFEASYLINKTX_TASK_PRIORITY;
+    timerTaskParams.stack = &txTaskStack;
+    timerTaskParams.arg0 = (UInt)1000000;
+
+    Task_construct(&timerTask, taskFxn, &timerTaskParams, NULL);
+}
+
 
 /*
  *  ======== main ========
@@ -307,18 +323,17 @@ int main(void)
     /* Open LED pins */
     pinHandle = PIN_open(&pinState, pinTable);
 	Assert_isTrue(pinHandle != NULL, NULL); 
-
     /* Clear LED pins */
     PIN_setOutputValue(pinHandle, Board_PIN_LED1, 0);
     PIN_setOutputValue(pinHandle, Board_PIN_LED2, 0);
 
     //txTask_init(pinHandle);
 
+    taskFxn(NULL, NULL);
+
     /* Start BIOS */
     BIOS_start();
 
-    /*timer function*/
-    //taskFxn(UArg a0, UArg a1);
 
     return (0);
 }
