@@ -36,6 +36,7 @@
  /* Standard C Libraries */
 #include <stdlib.h>
 
+/* timer library */
 #include <ti/drivers/timer/GPTimerCC26XX.h>
 
 /* XDCtools Header files */
@@ -257,33 +258,42 @@ void txTask_init(PIN_Handle inPinHandle) {
 }
 
 /*
- *  Timer callback function!
+ *  Timer
  */
 
 GPTimerCC26XX_Handle hTimer;
+
 void timerCallback(GPTimerCC26XX_Handle handle, GPTimerCC26XX_IntMask interruptMask) {
     // interrupt callback code goes here. Minimize processing in interrupt.
+    printf("Callback\n");
 }
+
 void taskFxn(UArg a0, UArg a1) {
+  GPTimerCC26XX_Part CC1350_GPTIMER0A;
   GPTimerCC26XX_Params params;
   GPTimerCC26XX_Params_init(&params);
   params.width          = GPT_CONFIG_16BIT;
   params.mode           = GPT_MODE_PERIODIC_UP;
   params.debugStallMode = GPTimerCC26XX_DEBUG_STALL_OFF;
-  hTimer = GPTimerCC26XX_open(CC2650_GPTIMER0A, &params);
+  hTimer = GPTimerCC26XX_open(CC1350_GPTIMER0A, &params);
+
   if(hTimer == NULL) {
     Log_error0("Failed to open GPTimer");
     Task_exit();
   }
-  Types_FreqHz  freq;
-  BIOS_getCpuFreq(&freq);
-  GPTimerCC26XX_Value loadVal = freq.lo / 1000 - 1; //47999
+
+//Types_FreqHz  freq;
+//BIOS_getCpuFreq(&freq);
+//GPTimerCC26XX_Value loadVal = freq.lo / 1000 - 1; //47999
+  GPTimerCC26XX_Value loadVal = 1000;
   GPTimerCC26XX_setLoadValue(hTimer, loadVal);
   GPTimerCC26XX_registerInterrupt(hTimer, timerCallback, GPT_INT_TIMEOUT);
   GPTimerCC26XX_start(hTimer);
+
   while(1) {
     Task_sleep(BIOS_WAIT_FOREVER);
   }
+
 }
 
 /*
@@ -298,16 +308,18 @@ int main(void)
     pinHandle = PIN_open(&pinState, pinTable);
 	Assert_isTrue(pinHandle != NULL, NULL); 
 
-    /* Clear LED pins */void timerCallback(GPTimerCC26XX_Handle handle, GPTimerCC26XX_IntMask interruptMask) {
-        // interrupt callback code goes here. Minimize processing in interrupt.
-    }
+    /* Clear LED pins */
     PIN_setOutputValue(pinHandle, Board_PIN_LED1, 0);
     PIN_setOutputValue(pinHandle, Board_PIN_LED2, 0);
 
-    txTask_init(pinHandle);
+    //txTask_init(pinHandle);
 
     /* Start BIOS */
     BIOS_start();
+
+    /*timer function*/
+    //taskFxn(UArg a0, UArg a1);
+
 
     return (0);
 }
