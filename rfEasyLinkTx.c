@@ -38,6 +38,7 @@
 
 /* timer library */
 #include <ti/drivers/timer/GPTimerCC26XX.h>
+#include <xdc/runtime/Types.h>
 
 /* XDCtools Header files */
 #include <xdc/std.h>
@@ -282,10 +283,9 @@ void taskFxn(UArg a0, UArg a1) {
     Task_exit();
   }
 
-//Types_FreqHz  freq;
-//BIOS_getCpuFreq(&freq);
-//GPTimerCC26XX_Value loadVal = freq.lo / 1000 - 1; //47999
-  GPTimerCC26XX_Value loadVal = 1000;
+  Types_FreqHz freq;
+  BIOS_getCpuFreq(&freq);
+  GPTimerCC26XX_Value loadVal = freq.lo / 1000 - 1; //47999
   GPTimerCC26XX_setLoadValue(hTimer, loadVal);
   GPTimerCC26XX_registerInterrupt(hTimer, timerCallback, GPT_INT_TIMEOUT);
   GPTimerCC26XX_start(hTimer);
@@ -319,7 +319,6 @@ int main(void)
 
     /*timer function*/
     //taskFxn(UArg a0, UArg a1);
-
 
     return (0);
 }
