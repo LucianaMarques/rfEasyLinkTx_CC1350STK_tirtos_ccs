@@ -184,6 +184,7 @@ static void rfEasyLinkTxFnx(UArg arg0, UArg arg1)
         while(1);
     }
 
+
     while(1) {
         EasyLink_TxPacket txPacket =  { {0}, 0, 0, {0} };
 
@@ -241,6 +242,7 @@ static void rfEasyLinkTxFnx(UArg arg0, UArg arg1)
         {
             /* Toggle LED1 to indicate TX */
             PIN_setOutputValue(pinHandle, Board_PIN_LED1,!PIN_getOutputValue(Board_PIN_LED1));
+            printf("Mensagem enviada com sucesso\n");
         }
         else
         {
@@ -250,8 +252,34 @@ static void rfEasyLinkTxFnx(UArg arg0, UArg arg1)
         }
 #endif //RFEASYLINKTX_ASYNC
     }
+}
 
+void init_Easylink (void)
+{
+        EasyLink_Params easyLink_params;
+        EasyLink_Params_init(&easyLink_params);
 
+        easyLink_params.ui32ModType = EasyLink_Phy_Custom;
+
+        /* Initialize EasyLink */
+        if(EasyLink_init(&easyLink_params) != EasyLink_Status_Success)
+        {
+            System_abort("EasyLink_init failed");
+        }
+
+        /*
+         * If you wish to use a frequency other than the default, use
+         * the following API:
+         * EasyLink_setFrequency(868000000);
+         */
+
+        EasyLink_Status pwrStatus = EasyLink_setRfPower(RFEASYLINKTX_RF_POWER);
+
+        if(pwrStatus != EasyLink_Status_Success)
+        {
+            // There was a problem setting the transmission power
+            while(1);
+        }
 }
 
 void txTask_init(PIN_Handle inPinHandle) {
@@ -273,9 +301,24 @@ void txTask_init(PIN_Handle inPinHandle) {
 void timerCallback(GPTimerCC26XX_Handle handle, GPTimerCC26XX_IntMask interruptMask) {
     // interrupt callback code goes here. Minimize processing in interrupt.
     printf("Callback\n");
+
+    EasyLink_TxPacket txPacket =  { {0}, 0, 0, {0} };
+
+    /* Create packet with incrementing sequence number and random payload */
+    txPacket.payload[0] = (uint8_t)(seqNumber >> 8);
+    txPacket.payload[1] = (uint8_t)(seqNumber++);
+    uint8_t i;
+    for (i = 2; i < RFEASYLINKTXPAYLOAD_LENGTH; i++)
+    {
+         txPacket.payload[i] = rand();
+    }
+    txPacket.len = RFEASYLINKTXPAYLOAD_LENGTH;
+    txPacket.dstAddr[0] = 0xaa;
+
+    EasyLink_transmitAsync(&txPacket, txDoneCb);
 }
 
-void taskFxn(UArg a0, UArg a1) {
+void taskFxnTimer(UArg a0, UArg a1) {
   GPTimerCC26XX_Params params;
   GPTimerCC26XX_Params_init(&params);
   params.width          = GPT_CONFIG_16BIT;
@@ -293,24 +336,12 @@ void taskFxn(UArg a0, UArg a1) {
   GPTimerCC26XX_Value loadVal = freq.lo / 1000 - 1; //47999
   GPTimerCC26XX_setLoadValue(hTimer, loadVal);
   GPTimerCC26XX_registerInterrupt(hTimer, timerCallback, GPT_INT_TIMEOUT);
+  //GPTimerCC26XX_registerInterrupt(hTimer, rfEasyLinkTxFnx, GPT_INT_TIMEOUT);
   GPTimerCC26XX_start(hTimer);
 
   printf("oi pedro\n");
 
 }
-
-
-void Timer_init(void) {
-
-    Task_Params_init(&timerTaskParams);
-    timerTaskParams.stackSize = RFEASYLINKTX_TASK_STACK_SIZE;
-    timerTaskParams.priority = RFEASYLINKTX_TASK_PRIORITY;
-    timerTaskParams.stack = &txTaskStack;
-    timerTaskParams.arg0 = (UInt)1000000;
-
-    Task_construct(&timerTask, taskFxn, &timerTaskParams, NULL);
-}
-
 
 /*
  *  ======== main ========
@@ -322,14 +353,14 @@ int main(void)
 
     /* Open LED pins */
     pinHandle = PIN_open(&pinState, pinTable);
-	Assert_isTrue(pinHandle != NULL, NULL); 
+    Assert_isTrue(pinHandle != NULL, NULL);
     /* Clear LED pins */
     PIN_setOutputValue(pinHandle, Board_PIN_LED1, 0);
     PIN_setOutputValue(pinHandle, Board_PIN_LED2, 0);
 
-    //txTask_init(pinHandle);
-
-    taskFxn(NULL, NULL);
+    txTask_init(pinHandle);
+    init_Easylink();
+    taskFxnTimer(NULL, NULL);
 
     /* Start BIOS */
     BIOS_start();
